@@ -8,6 +8,7 @@
 #pragma warning(disable:6011) // remove dereference warnings on VS
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 struct listDef {
 	int* theList;
@@ -19,7 +20,7 @@ int* fillArray(unsigned int*, char[]);
 struct listDef improvedInsertionSort(int[], unsigned int);
 void printArray(int[], unsigned int);
 void writeArray(int[], unsigned int, char[]);
-void insertionSort(struct listDef*);
+void* insertionSort(struct listDef*);
 int* merge2List(int[], int[], unsigned int, unsigned int, unsigned int*);
 
 int main(int argc, char* argv[])
@@ -202,17 +203,25 @@ struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 		}
 	}
 
+	pthread_t threads[10];
+
 	printf("Begin of regular insertion sort to 10 list\n\n");
-	insertionSort(&list1);
-	insertionSort(&list2);
-	insertionSort(&list3);
-	insertionSort(&list4);
-	insertionSort(&list5);
-	insertionSort(&list6);
-	insertionSort(&list7);
-	insertionSort(&list8);
-	insertionSort(&list9);
-	insertionSort(&list10);
+	// Creating and starting threads
+	pthread_create(&threads[0], NULL, insertionSort, (void*)&list1);
+	pthread_create(&threads[1], NULL, insertionSort, (void*)&list2);
+	pthread_create(&threads[2], NULL, insertionSort, (void*)&list3);
+	pthread_create(&threads[3], NULL, insertionSort, (void*)&list4);
+	pthread_create(&threads[4], NULL, insertionSort, (void*)&list5);
+	pthread_create(&threads[5], NULL, insertionSort, (void*)&list6);
+	pthread_create(&threads[6], NULL, insertionSort, (void*)&list7);
+	pthread_create(&threads[7], NULL, insertionSort, (void*)&list8);
+	pthread_create(&threads[8], NULL, insertionSort, (void*)&list9);
+	pthread_create(&threads[9], NULL, insertionSort, (void*)&list10);
+
+	// Waiting for threads to complete
+	for (i = 0; i < 10; i++)
+		pthread_join(threads[i], NULL);
+
 	printf("\nRegular insertion sort to 10 list has been completed\n");
 
 	printf("Begin of merging 10 list into 5 sublist\n\n");
@@ -272,8 +281,10 @@ void writeArray(int numbers[], unsigned int numbersCount, char outputFileName[])
 	printf("Writing operation has been completed\n");
 }
 
-void insertionSort(struct listDef *list)
+void* insertionSort(void *args)
 {
+	struct listDef* list = (struct listDef*) args;
+
 	printf("insertionSort: sorting %u numbers...\n", list->elementCount);
 	unsigned int i, j;
 	int temp;
