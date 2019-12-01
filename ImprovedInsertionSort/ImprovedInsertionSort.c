@@ -39,7 +39,9 @@ int main(int argc, char* argv[])
 	unsigned int numOfInts;
 	int* numArray = fillArray(&numOfInts, argv[1]);
 
+	printf("\n");
 	struct listDef sortedList = improvedInsertionSort(numArray, numOfInts);
+	printf("\n");
 
 	writeArray(sortedList.theList, sortedList.elementCount, argv[2]);
 
@@ -69,13 +71,17 @@ int checkFile(char fileName[])
 
 int* fillArray(unsigned int* numOfInts, char inputFileName[])
 {
+	printf("Opening %s\n", inputFileName);
+
 	FILE* txt = fopen(inputFileName, "r");
 
 	int* arrayToBeReturned;
 
-	fscanf(txt, "%d\n", numOfInts);
+	fscanf(txt, "%u\n", numOfInts);
 
 	arrayToBeReturned = (int*)malloc((*numOfInts) * sizeof(int));
+
+	printf("Reading and storing %u number to memory\n", *numOfInts);
 
 	unsigned int i;
 	for (i = 0; i < *numOfInts; i++)
@@ -83,11 +89,14 @@ int* fillArray(unsigned int* numOfInts, char inputFileName[])
 
 	fclose(txt);
 
+	printf("Reading operation has been completed\n");
 	return arrayToBeReturned;
 }
 
 struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 {
+	printf("Begin of improvedInsertionSort\n");
+	printf("Creating and filling 10 list\n");
 	unsigned int i;
 
 	int min = numbers[0];
@@ -193,6 +202,7 @@ struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 		}
 	}
 
+	printf("Begin of regular insertion sort to 10 list\n\n");
 	list1.theList = insertionSort(list1.theList, list1.elementCount);
 	list2.theList = insertionSort(list2.theList, list2.elementCount);
 	list3.theList = insertionSort(list3.theList, list3.elementCount);
@@ -203,7 +213,9 @@ struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 	list8.theList = insertionSort(list8.theList, list8.elementCount);
 	list9.theList = insertionSort(list9.theList, list9.elementCount);
 	list10.theList = insertionSort(list10.theList, list10.elementCount);
+	printf("\nRegular insertion sort to 10 list has been completed\n");
 
+	printf("Begin of merging 10 list into 5 sublist\n\n");
 	struct listDef subList1;
 	struct listDef subList2;
 	struct listDef subList3;
@@ -215,7 +227,9 @@ struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 	subList3.theList = merge2List(list5.theList, list6.theList, list5.elementCount, list6.elementCount, &subList3.elementCount);
 	subList4.theList = merge2List(list7.theList, list8.theList, list7.elementCount, list8.elementCount, &subList4.elementCount);
 	subList5.theList = merge2List(list9.theList, list10.theList, list9.elementCount, list10.elementCount, &subList5.elementCount);
+	printf("\nMerging 10 list into 5 sublist has been completed\n");
 
+	printf("Begin of merging 5 list into 3 sublist\n\n");
 	struct listDef subSubList1;
 	struct listDef subSubList2;
 
@@ -225,11 +239,15 @@ struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 	struct listDef subSubList3;
 
 	subSubList3.theList = merge2List(subSubList1.theList, subSubList2.theList, subSubList1.elementCount, subSubList2.elementCount, &subSubList3.elementCount);
+	printf("\nMerging 5 list into 3 sublist has been completed\n");
 
+	printf("Begin of last merge operation\n\n");
 	struct listDef sortedList;
 
 	sortedList.theList = merge2List(subList5.theList, subSubList3.theList, subList5.elementCount, subSubList3.elementCount, &sortedList.elementCount);
+	printf("\nLast merge operation has been completed\n\n");
 
+	printf("End of improvedInsertionSort\n");
 	return sortedList;
 }
 
@@ -242,6 +260,7 @@ void printArray(int numbers[], unsigned int numbersCount)
 
 void writeArray(int numbers[], unsigned int numbersCount, char outputFileName[])
 {
+	printf("Writing %u numbers to %s\n", numbersCount, outputFileName);
 	FILE* txt = fopen(outputFileName, "w");
 
 	unsigned int i;
@@ -249,10 +268,13 @@ void writeArray(int numbers[], unsigned int numbersCount, char outputFileName[])
 		fprintf(txt, "%d\n", numbers[i]);
 
 	fclose(txt);
+
+	printf("Writing operation has been completed\n");
 }
 
 int* insertionSort(int numbers[], unsigned int numbersCount)
 {
+	printf("insertionSort: sorting %u numbers...\n", numbersCount);
 	unsigned int i, j;
 	int temp;
 	unsigned int n = numbersCount;
@@ -273,6 +295,8 @@ int* insertionSort(int numbers[], unsigned int numbersCount)
 
 int* merge2List(int list1[], int list2[], unsigned int list1Count, unsigned int list2Count, unsigned int* newListCount)
 {
+	printf("merge2List: merging list that contains %u numbers and list that contains %u numbers...\n", list1Count, list2Count);
+
 	int* theListToBeReturned = (int*)malloc((list1Count + list2Count) * sizeof(int));
 
 	unsigned int list1Cursor = 0, list2Cursor = 0, theListCursor = 0;
