@@ -10,16 +10,16 @@
 #include <stdlib.h>
 
 int checkFile(char[]);
-int* fillArray(int*, char[]);
-struct listDef improvedInsertionSort(int[], int);
-void printArray(int[], int);
-void writeArray(int[], int, char[]);
-int* insertionSort(int[], int);
-int* merge2List(int[], int[], int, int, int*);
+int* fillArray(unsigned int*, char[]);
+struct listDef improvedInsertionSort(int[], unsigned int);
+void printArray(int[], unsigned int);
+void writeArray(int[], unsigned int, char[]);
+int* insertionSort(int[], unsigned int);
+int* merge2List(int[], int[], unsigned int, unsigned int, unsigned int*);
 
 struct listDef {
 	int* theList;
-	int elementCount;
+	unsigned int elementCount;
 };
 
 int main(int argc, char* argv[])
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	int numOfInts;
+	unsigned int numOfInts;
 	int* numArray = fillArray(&numOfInts, argv[1]);
 
 	struct listDef sortedList = improvedInsertionSort(numArray, numOfInts);
@@ -67,7 +67,7 @@ int checkFile(char fileName[])
 	return 0;
 }
 
-int* fillArray(int* numOfInts, char inputFileName[])
+int* fillArray(unsigned int* numOfInts, char inputFileName[])
 {
 	FILE* txt = fopen(inputFileName, "r");
 
@@ -77,7 +77,7 @@ int* fillArray(int* numOfInts, char inputFileName[])
 
 	arrayToBeReturned = (int*)malloc((*numOfInts) * sizeof(int));
 
-	int i;
+	unsigned int i;
 	for (i = 0; i < *numOfInts; i++)
 		fscanf(txt, "%d\n", &arrayToBeReturned[i]);
 
@@ -86,9 +86,9 @@ int* fillArray(int* numOfInts, char inputFileName[])
 	return arrayToBeReturned;
 }
 
-struct listDef improvedInsertionSort(int numbers[], int numbersCount)
+struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 {
-	int i;
+	unsigned int i;
 
 	int min = numbers[0];
 	int max = numbers[0];
@@ -233,28 +233,29 @@ struct listDef improvedInsertionSort(int numbers[], int numbersCount)
 	return sortedList;
 }
 
-void printArray(int numbers[], int numbersCount)
+void printArray(int numbers[], unsigned int numbersCount)
 {
-	int i;
+	unsigned int i;
 	for (i = 0; i < numbersCount; i++)
 		printf("%d\n", numbers[i]);
 }
 
-void writeArray(int numbers[], int numbersCount, char outputFileName[])
+void writeArray(int numbers[], unsigned int numbersCount, char outputFileName[])
 {
 	FILE* txt = fopen(outputFileName, "w");
 
-	int i;
+	unsigned int i;
 	for (i = 0; i < numbersCount; i++)
 		fprintf(txt, "%d\n", numbers[i]);
 
 	fclose(txt);
 }
 
-int* insertionSort(int numbers[], int numbersCount)
+int* insertionSort(int numbers[], unsigned int numbersCount)
 {
-	int i, j, temp;
-	int n = numbersCount;
+	unsigned int i, j;
+	int temp;
+	unsigned int n = numbersCount;
 	for (i = 1; i <= n - 1; i++)
 	{
 		j = i;
@@ -270,11 +271,11 @@ int* insertionSort(int numbers[], int numbersCount)
 	return numbers;
 }
 
-int* merge2List(int list1[], int list2[], int list1Count, int list2Count, int* newListCount)
+int* merge2List(int list1[], int list2[], unsigned int list1Count, unsigned int list2Count, unsigned int* newListCount)
 {
 	int* theListToBeReturned = (int*)malloc((list1Count + list2Count) * sizeof(int));
 
-	int list1Cursor = 0, list2Cursor = 0, theListCursor = 0;
+	unsigned int list1Cursor = 0, list2Cursor = 0, theListCursor = 0;
 	while (list1Count != list1Cursor && list2Count != list2Cursor)
 	{
 		if (list1[list1Cursor] < list2[list2Cursor])
