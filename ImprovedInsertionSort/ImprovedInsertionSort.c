@@ -9,9 +9,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int* fillArray(int*);
+int checkFile(char[]);
+int* fillArray(int*, char[]);
 struct listDef improvedInsertionSort(int[], int);
 void printArray(int[], int);
+void writeArray(int[], int, char[]);
 int* insertionSort(int[], int);
 int* merge2List(int[], int[], int, int, int*);
 
@@ -20,29 +22,66 @@ struct listDef {
 	int elementCount;
 };
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc != 3)
+	{
+		printf("usage: improvedinsertionsort <input file name> <output file name>");
+		exit(1);
+	}
+
+	if (checkFile(argv[1]))
+	{
+		printf("The input file could not be opened, is empty or is not exist");
+		exit(1);
+	}
+
 	int numOfInts;
-	int* numArray = fillArray(&numOfInts);
+	int* numArray = fillArray(&numOfInts, argv[1]);
 
 	struct listDef sortedList = improvedInsertionSort(numArray, numOfInts);
 
-	printArray(sortedList.theList, sortedList.elementCount);
+	writeArray(sortedList.theList, sortedList.elementCount, argv[2]);
 
 	return 0;
 }
 
-int* fillArray(int* numOfInts)
+int checkFile(char fileName[])
 {
+	FILE* txt = fopen(fileName, "r");
+
+	if (txt == NULL) // file is not present
+		return 1;
+
+	char firstLine;
+	fscanf(txt, "%c", &firstLine);
+
+	if (firstLine == 0) // file is empty
+	{
+		fclose(txt);
+		return 1;
+	}
+
+	fclose(txt);
+
+	return 0;
+}
+
+int* fillArray(int* numOfInts, char inputFileName[])
+{
+	FILE* txt = fopen(inputFileName, "r");
+
 	int* arrayToBeReturned;
 
-	scanf("%d\n", numOfInts);
+	fscanf(txt, "%d\n", numOfInts);
 
 	arrayToBeReturned = (int*)malloc((*numOfInts) * sizeof(int));
 
 	int i;
 	for (i = 0; i < *numOfInts; i++)
-		scanf("%d\n", &arrayToBeReturned[i]);
+		fscanf(txt, "%d\n", &arrayToBeReturned[i]);
+
+	fclose(txt);
 
 	return arrayToBeReturned;
 }
@@ -199,6 +238,17 @@ void printArray(int numbers[], int numbersCount)
 	int i;
 	for (i = 0; i < numbersCount; i++)
 		printf("%d\n", numbers[i]);
+}
+
+void writeArray(int numbers[], int numbersCount, char outputFileName[])
+{
+	FILE* txt = fopen(outputFileName, "w");
+
+	int i;
+	for (i = 0; i < numbersCount; i++)
+		fprintf(txt, "%d\n", numbers[i]);
+
+	fclose(txt);
 }
 
 int* insertionSort(int numbers[], int numbersCount)
