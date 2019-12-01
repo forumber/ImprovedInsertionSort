@@ -20,7 +20,7 @@ int* fillArray(unsigned int*, char[]);
 struct listDef improvedInsertionSort(int[], unsigned int);
 void printArray(int[], unsigned int);
 void writeArray(int[], unsigned int, char[]);
-void* insertionSort(struct listDef*);
+void* insertionSort(void*);
 int* merge2List(int[], int[], unsigned int, unsigned int, unsigned int*);
 
 int main(int argc, char* argv[])
