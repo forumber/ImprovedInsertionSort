@@ -9,18 +9,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct listDef {
+	int* theList;
+	unsigned int elementCount;
+};
+
 int checkFile(char[]);
 int* fillArray(unsigned int*, char[]);
 struct listDef improvedInsertionSort(int[], unsigned int);
 void printArray(int[], unsigned int);
 void writeArray(int[], unsigned int, char[]);
-int* insertionSort(int[], unsigned int);
+void insertionSort(struct listDef*);
 int* merge2List(int[], int[], unsigned int, unsigned int, unsigned int*);
-
-struct listDef {
-	int* theList;
-	unsigned int elementCount;
-};
 
 int main(int argc, char* argv[])
 {
@@ -203,16 +203,16 @@ struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 	}
 
 	printf("Begin of regular insertion sort to 10 list\n\n");
-	list1.theList = insertionSort(list1.theList, list1.elementCount);
-	list2.theList = insertionSort(list2.theList, list2.elementCount);
-	list3.theList = insertionSort(list3.theList, list3.elementCount);
-	list4.theList = insertionSort(list4.theList, list4.elementCount);
-	list5.theList = insertionSort(list5.theList, list5.elementCount);
-	list6.theList = insertionSort(list6.theList, list6.elementCount);
-	list7.theList = insertionSort(list7.theList, list7.elementCount);
-	list8.theList = insertionSort(list8.theList, list8.elementCount);
-	list9.theList = insertionSort(list9.theList, list9.elementCount);
-	list10.theList = insertionSort(list10.theList, list10.elementCount);
+	insertionSort(&list1);
+	insertionSort(&list2);
+	insertionSort(&list3);
+	insertionSort(&list4);
+	insertionSort(&list5);
+	insertionSort(&list6);
+	insertionSort(&list7);
+	insertionSort(&list8);
+	insertionSort(&list9);
+	insertionSort(&list10);
 	printf("\nRegular insertion sort to 10 list has been completed\n");
 
 	printf("Begin of merging 10 list into 5 sublist\n\n");
@@ -272,25 +272,23 @@ void writeArray(int numbers[], unsigned int numbersCount, char outputFileName[])
 	printf("Writing operation has been completed\n");
 }
 
-int* insertionSort(int numbers[], unsigned int numbersCount)
+void insertionSort(struct listDef *list)
 {
-	printf("insertionSort: sorting %u numbers...\n", numbersCount);
+	printf("insertionSort: sorting %u numbers...\n", list->elementCount);
 	unsigned int i, j;
 	int temp;
-	unsigned int n = numbersCount;
+	unsigned int n = list->elementCount;
 	for (i = 1; i <= n - 1; i++)
 	{
 		j = i;
-		while (j > 0 && numbers[j - 1] > numbers[j])
+		while (j > 0 && list->theList[j - 1] > list->theList[j])
 		{
-			temp = numbers[j];
-			numbers[j] = numbers[j - 1];
-			numbers[j - 1] = temp;
+			temp = list->theList[j];
+			list->theList[j] = list->theList[j - 1];
+			list->theList[j - 1] = temp;
 			j--;
 		}
 	}
-
-	return numbers;
 }
 
 int* merge2List(int list1[], int list2[], unsigned int list1Count, unsigned int list2Count, unsigned int* newListCount)
