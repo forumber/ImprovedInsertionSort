@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <time.h>
 
 struct listDef {
 	int* theList;
@@ -97,6 +98,8 @@ int* fillArray(unsigned int* numOfInts, char inputFileName[])
 struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 {
 	printf("Begin of improvedInsertionSort\n");
+	clock_t t = clock(); // start time
+
 	printf("Creating and filling 10 list\n");
 	unsigned int i;
 
@@ -256,6 +259,9 @@ struct listDef improvedInsertionSort(int numbers[], unsigned int numbersCount)
 	sortedList.theList = merge2List(subList5.theList, subSubList3.theList, subList5.elementCount, subSubList3.elementCount, &sortedList.elementCount);
 	printf("\nLast merge operation has been completed\n\n");
 
+	t = clock() - t;
+	double time_taken = ((double)t) / CLOCKS_PER_SEC; // calculate the elapsed time
+	printf("The improvedInsertionSort function took %lf seconds to execute\n", time_taken);
 	printf("End of improvedInsertionSort\n");
 	return sortedList;
 }
